@@ -1,6 +1,6 @@
 module.exports = function check(str, bracketsConfig) {
   const stack = [];
-  let eight = 0;
+  let countLast = 0;
   let index = 0;
   str = str.split('');
   masiv = [].concat(...bracketsConfig);
@@ -10,16 +10,16 @@ module.exports = function check(str, bracketsConfig) {
   for (let elem of str) {
     for (let i = 0; i < masiv.length; i++) {
       if (elem === masiv[i]) {
-        if (masiv[i] === '8') {
-          if( eight === 0) {
+        if (masiv[i] === masiv.at(-1) && masiv[i] === masiv.at(-2)) {
+          if( countLast === 0) {
             stack.push(masiv[i]);
-            eight += 1;
-            i = 10000;
+            countLast += 1;
+            i = masiv.length;
           } else {
             if (stack.at(-1) === masiv[i]) {
               stack.pop();
-              eight = eight - 1;
-              i = 10000;
+              countLast = countLast - 1;
+              i = masiv.length;
             } else {
               return false;
             }
@@ -41,11 +41,9 @@ module.exports = function check(str, bracketsConfig) {
         } else {
           if (i === 0 || i % 2 === 0) {
             stack.push(masiv[i])
-            i = 10000;
           } else if (i % 2 !== 0) {
             if (stack.at(-1) === masiv[i - 1]) {
               stack.pop();
-              i = 10000;
             } else {
               return false;
             }
